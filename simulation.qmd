@@ -1,0 +1,59 @@
+---
+title: "Quiz5a"
+format: pdf
+editor: visual
+---
+```{r}
+install.packages("ggplot2")
+```
+
+```{r}
+# Load necessary library
+library(ggplot2)
+
+# Set seed for reproducibility
+set.seed(42)
+
+# Number of days
+days <- 100
+
+# Simulate data
+data <- data.frame(
+  Day = 1:days,
+  Matt = rnorm(days, mean = 50, sd = 20),
+  Ash = rnorm(days, mean = 75, sd = 20),
+  Jacki = rnorm(days, mean = 60, sd = 20),
+  Rol = rnorm(days, mean = 40, sd = 20),
+  Mike = rnorm(days, mean = 70, sd = 20)
+)
+
+# View the first few rows of the simulated data
+head(data)
+```
+```{r}
+install.packages("car")
+install.packages("tseries")
+```
+
+```{r}
+# 1. T-test for mean comparison between two undergraduates (e.g., Matt vs. Ash)
+t.test(data$Matt, data$Ash)
+
+# 2. Test for variance equality (Levene's Test)
+library(car)
+leveneTest(data$Matt, data$Ash)
+
+# 3. ANOVA to test if the overall mean is the same for all undergraduates
+aov_result <- aov(Day ~ Matt + Ash + Jacki + Rol + Mike, data = data)
+summary(aov_result)
+
+# 4. Test for a trend over time (e.g., for Matt)
+model <- lm(Matt ~ Day, data = data)
+summary(model)
+
+# 5. Run test for randomness (e.g., Runs test for Matt)
+library(tseries)
+runs.test(as.factor(data$Matt > mean(data$Matt)))
+
+```
+
