@@ -1,0 +1,97 @@
+---
+title: "Quiz5a"
+format: pdf
+editor: visual
+---
+```{r}
+install.packages("ggplot2")
+```
+
+```{r}
+# Load necessary library
+library(ggplot2)
+
+# Set seed for reproducibility
+set.seed(42)
+
+# Number of days
+days <- 100
+
+# Simulate data
+data <- data.frame(
+  Day = 1:days,
+  Matt = rnorm(days, mean = 50, sd = 20),
+  Ash = rnorm(days, mean = 75, sd = 20),
+  Jacki = rnorm(days, mean = 60, sd = 20),
+  Rol = rnorm(days, mean = 40, sd = 20),
+  Mike = rnorm(days, mean = 70, sd = 20)
+)
+
+# View the first few rows of the simulated data
+head(data)
+```
+```{r}
+# Assuming 'data' is a data frame with columns 'Day', 'Matt', 'Ash', 'Jacki', 'Rol', 'Mike'
+
+# Test 1: Check if the number of pages read is an integer
+test1 <- function(data) {
+  all(apply(data[, -1], 2, function(x) all(x %% 1 == 0)))
+}
+
+# Test 2: Check if the number is greater than 0
+test2 <- function(data) {
+  all(data[, -1] > 0)
+}
+
+# Test 3: Check if the number is a positive number (including zero)
+test3 <- function(data) {
+  all(data[, -1] >= 0)
+}
+
+# Test 4: Check for unrealistic high numbers (e.g., more than 300 pages a day)
+test4 <- function(data) {
+  all(data[, -1] <= 300)
+}
+
+# Test 5: Check for any missing values
+test5 <- function(data) {
+  !any(is.na(data))
+}
+
+# Apply the tests
+test1_result <- test1(data)
+test2_result <- test2(data)
+test3_result <- test3(data)
+test4_result <- test4(data)
+test5_result <- test5(data)
+
+# Print results
+print(c(test1_result, test2_result, test3_result, test4_result, test5_result))
+```
+
+```{r}
+install.packages("reshape2")
+```
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+# Assuming 'data' is your data frame with columns: 'Day', 'Matt', 'Ash', 'Jacki', 'Rol', 'Mike'
+# Convert data from wide to long format
+data_long <- melt(data, id.vars = 'Day', variable.name = 'Undergraduate', value.name = 'PagesRead')
+
+# Use ggplot2 to plot
+gg <- ggplot(data_long, aes(x = Day, y = PagesRead, color = Undergraduate)) +
+  geom_line() +
+  theme_minimal() +
+  labs(title = 'Daily Pages Read by Each Undergraduate Over 100 Days',
+       x = 'Day',
+       y = 'Number of Pages Read')
+
+# Display the plot
+print(gg)
+
+```
+
+
